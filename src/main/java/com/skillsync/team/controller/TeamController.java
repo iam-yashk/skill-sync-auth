@@ -18,11 +18,6 @@ public class TeamController {
         this.teamService = teamService;
     }
 
-    @GetMapping("/check")
-    public ResponseEntity<String> check() {
-        return ResponseEntity.ok("Check Successful");
-    }
-
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Team> createTeam(@RequestBody Team team) {
@@ -37,11 +32,6 @@ public class TeamController {
     public ResponseEntity<List<Team>> getAllTeams() {
         List<Team> teams = teamService.getAllTeams();
         return ResponseEntity.ok(teams);
-    }
-
-    @GetMapping("/ping")
-    public String ping() {
-        return "Ping ok!";
     }
 
 }

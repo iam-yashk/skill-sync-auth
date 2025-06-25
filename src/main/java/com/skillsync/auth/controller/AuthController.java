@@ -26,11 +26,6 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
 
-    @GetMapping("/check")
-    public ResponseEntity<String> check() {
-        return ResponseEntity.ok("Check Successful");
-    }
-
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         if(userRepository.findByEmail(user.getEmail()).isPresent()) {

@@ -27,9 +27,14 @@ public class AuthController {
     private JwtService jwtService;
 
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
+    public ResponseEntity<?> register(@RequestBody User user) {
+        if(userRepository.findByEmail(user.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body("Email Already Exists");
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        User saved = userRepository.save(user);
+        return ResponseEntity.ok(saved);
     }
 
     @PostMapping("/login")
@@ -45,7 +50,7 @@ public class AuthController {
         }
 
         // Generate JWT token
-        String token = jwtService.generateToken(request.getEmail());
+        String token = jwtService.generateToken(user);
         return ResponseEntity.ok(Collections.singletonMap("token", token));
     }
 }

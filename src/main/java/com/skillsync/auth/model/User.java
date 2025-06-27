@@ -3,10 +3,11 @@ package com.skillsync.auth.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -26,11 +27,13 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    private String role; // e.g., ADMIN, MEMBER
+    @Enumerated(EnumType.STRING)
+    private Role role; // e.g., ADMIN, MEMBER
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // or List.of(() -> "ROLE_" + role)
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role));
+//        return Collections.emptyList(); // or List.of(() -> "ROLE_" + role)
     }
 
     @Override
